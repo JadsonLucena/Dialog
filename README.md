@@ -46,7 +46,8 @@ alert(
         style?: string,
         script?: (main: HTMLElement) => void,
         persistent?: boolean = false,
-        textResolve?: string = 'Ok'
+        textResolve?: string = 'Ok',
+        onClose?: (key: number) => void
     }?
 ): number
 
@@ -61,7 +62,8 @@ confirm(
         script?: (main: HTMLElement) => void,
         persistent?: boolean = false,
         textResolve?: string = 'Ok',
-        textReject?: string = 'No'
+        textReject?: string = 'No',
+        onClose?: (key: number) => void
     }?
 ): number
 
@@ -74,7 +76,8 @@ notify(
         script?: (main: HTMLElement, footer: HTMLElement) => void,
         persistent?: boolean = false,
         discreet?: boolean = true, // If true, the dialog will appear in the lower right corner, otherwise, in the upper central part
-        duration?: number // If a time is not provided, it will be calculated based on the total number of characters, although the minimum time is 3000ms
+        duration?: number, // If a time is not provided, it will be calculated based on the total number of characters, although the minimum time is 3000ms
+        onClose?: (key: number) => void
     }?
 ): number
 
@@ -86,7 +89,8 @@ popUp(
         style?: string,
         script?: (main: HTMLElement, footer: HTMLElement) => void,
         persistent?: boolean = false, // if true, the dialog does not close on the click outside or on the press of the esc
-        fullScreen?: boolean = false // If true, the dialog will fill the entire window and the close button will change
+        fullScreen?: boolean = false, // If true, the dialog will fill the entire window and the close button will change
+        onClose?: (key: number) => void
     }?
 ): number
 
@@ -98,7 +102,8 @@ show(
         style?: string,
         script?: (main: HTMLElement, footer: HTMLElement) => void,
         persistent?: boolean = false,
-        fullScreen?: boolean = false // If true, the dialog will fill the entire window
+        fullScreen?: boolean = false, // If true, the dialog will fill the entire window
+        onClose?: (key: number) => void
     }?
 ): number
 ```
@@ -118,13 +123,15 @@ var popUpKey = dialog.popUp(
             main.querySelector('h1').onclick = () => {
 
                 let notifyKey = dialog.notify('Here will be the content to be displayed', {
-                    duration: 5000
+                    duration: 5000,
+                    onClose: key => console.log('closed notify', key)
                 });
 
             };
 
         },
-        fullScreen: true
+        fullScreen: true,
+        onClose: key => console.log('closed popUp', key)
     }
 );
 
@@ -139,7 +146,8 @@ var confirmKey = dialog.confirm(
     {
         persistent: true,
         textResolve: 'Next',
-        textReject: 'Cancel'
+        textReject: 'Cancel',
+        onClose: key => console.log('closed confirm', key)
     }
 );
 
